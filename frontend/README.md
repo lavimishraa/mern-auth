@@ -53,6 +53,7 @@ The project is fully deployed with a live frontend and backend.
 ---
 
 ## 📂 Project Structure
+``` bash
 mern-auth/
 │
 ├── backend/
