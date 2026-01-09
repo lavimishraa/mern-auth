@@ -1,8 +1,11 @@
 import { useState } from "react";
 import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
 import "./Auth.css";
 
 function Register() {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -30,17 +33,21 @@ function Register() {
         formData
       );
 
-      alert(res.data.message);
+      alert(res.data.message || "Registered successfully");
 
-      // Clear form after success
+      // Clear form
       setFormData({
         name: "",
         email: "",
         password: ""
       });
+
+      // Redirect to login page after register
+      navigate("/login");
     } catch (err) {
       setError(
-        err.response?.data?.message || "Registration failed. Try again."
+        err.response?.data?.message ||
+          "Registration failed. Please try again."
       );
     } finally {
       setLoading(false);
@@ -52,7 +59,11 @@ function Register() {
       <div className="auth-card">
         <h2>Create Account</h2>
 
-        {error && <p style={{ color: "red", textAlign: "center" }}>{error}</p>}
+        {error && (
+          <p style={{ color: "red", textAlign: "center", marginBottom: "10px" }}>
+            {error}
+          </p>
+        )}
 
         <form onSubmit={handleSubmit}>
           <input
@@ -88,7 +99,7 @@ function Register() {
         </form>
 
         <p>
-          Already have an account? <a href="/login">Login</a>
+          Already have an account? <Link to="/login">Login</Link>
         </p>
       </div>
     </div>
