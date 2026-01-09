@@ -9,6 +9,9 @@ function Register() {
     password: ""
   });
 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -18,28 +21,45 @@ function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+    setLoading(true);
 
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/auth/register",
+        "https://mern-auth-backend-upx9.onrender.com/api/auth/register",
         formData
       );
+
       alert(res.data.message);
+
+      // Clear form after success
+      setFormData({
+        name: "",
+        email: "",
+        password: ""
+      });
     } catch (err) {
-      alert("Registration failed");
+      setError(
+        err.response?.data?.message || "Registration failed. Try again."
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="auth-container">
       <div className="auth-card">
-        <h2>Register</h2>
+        <h2>Create Account</h2>
+
+        {error && <p style={{ color: "red", textAlign: "center" }}>{error}</p>}
 
         <form onSubmit={handleSubmit}>
           <input
             type="text"
             name="name"
-            placeholder="Name"
+            placeholder="Full Name"
+            value={formData.name}
             onChange={handleChange}
             required
           />
@@ -47,7 +67,8 @@ function Register() {
           <input
             type="email"
             name="email"
-            placeholder="Email"
+            placeholder="Email Address"
+            value={formData.email}
             onChange={handleChange}
             required
           />
@@ -56,11 +77,14 @@ function Register() {
             type="password"
             name="password"
             placeholder="Password"
+            value={formData.password}
             onChange={handleChange}
             required
           />
 
-          <button type="submit">Register</button>
+          <button type="submit" disabled={loading}>
+            {loading ? "Registering..." : "Register"}
+          </button>
         </form>
 
         <p>
