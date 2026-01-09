@@ -76,7 +76,7 @@ mern-auth/
 ├── vercel.json
 └── package.json
 
-
+```
 ---
 
 ## ⚙️ Installation & Setup (Local)
